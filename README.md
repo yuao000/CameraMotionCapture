@@ -4,6 +4,7 @@
 【手順】
 
 ■スマホ側：
+
 ※自動回転をオフにしておく
 
 ①スマホで下記サイトにアクセス。
@@ -20,6 +21,7 @@ https://yuao000.github.io/CameraMotionCapture/
 
 
 ■PC側：
+
 ①VMDエディタを起動
 https://w.atwiki.jp/vpvpwiki/pages/218.html#id_e07bf223
 
