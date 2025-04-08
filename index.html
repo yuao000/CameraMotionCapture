@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマホの方向表示</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #orientation {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="orientation">
+        前後: <span id="beta">0</span> 度<br>
+        方角: <span id="alpha">0</span> 度<br>
+        左右: <span id="gamma">0</span> 度
+    </div>
+    <div>
+        <button id="resetButton">リセット</button>
+    </div>
+    <div>
+        <button id="startButton">記録開始</button>
+        <button id="stopButton" disabled>記録停止</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
