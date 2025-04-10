@@ -4,6 +4,8 @@ const gammaElement = document.getElementById('gamma');
 const resetButton = document.getElementById('resetButton');
 const startButton = document.getElementById('startButton');
 const stopButton = document.getElementById('stopButton');
+const permissionRequestDiv = document.getElementById('permissionRequest');
+const permissionButton = document.getElementById('permissionButton');
 
 let initialBeta = 0;
 let initialAlpha = 0;
@@ -19,9 +21,13 @@ const recordedData = [];
 let recordIntervalId;
 const recordInterval = 1000 / 31; // 31フレーム/秒
 const smoothingWindow = 5; // 移動平均のウィンドウサイズ
+let hasPermission = false;
+
+// デバイスの向きのイベントリスナー
+let orientationEventListener = null;
 
 // デバイスの向きが変化したときの処理
-window.addEventListener('deviceorientation', (event) => {
+const handleOrientation = (event) => {
     currentBeta = event.beta ? Math.round(event.beta) : 0;   // 前後 (X軸回転) -180 ~ 180
     currentAlpha = event.alpha ? Math.round(event.alpha) : 0; // 方角 (Z軸回転) 0 ~ 360
     currentGamma = event.gamma ? Math.round(event.gamma) : 0; // 左右 (Y軸回転) -90 ~ 90
@@ -36,6 +42,50 @@ window.addEventListener('deviceorientation', (event) => {
     betaElement.textContent = currentBeta - initialBeta;
     alphaElement.textContent = currentAlpha - initialAlpha;
     gammaElement.textContent = currentGamma - initialGamma;
+};
+
+// モーションセンサーの利用可能性と許可をチェック
+function checkDeviceOrientationPermission() {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iOS 13以降
+        permissionRequestDiv.classList.remove('hidden'); // 初期状態で表示
+    } else {
+        // 古いブラウザ (Android, PCなど) は許可を必要としないとみなす
+        hasPermission = true;
+        permissionRequestDiv.classList.add('hidden'); // permissionRequest を非表示にする
+        window.addEventListener('deviceorientation', handleOrientation);
+        resetButton.click(); // リセットを実行
+    }
+}
+
+// ページロード時に許可チェック
+window.addEventListener('load', () => {
+    checkDeviceOrientationPermission();
+});
+
+// 許可を求めるボタンのイベントリスナー
+permissionButton.addEventListener('click', () => {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+                console.log('Permission State (Button):', permissionState); // 許可状態をログに出力
+                if (permissionState === 'granted') {
+                    hasPermission = true;
+                    permissionRequestDiv.classList.add('hidden'); // 許可後に非表示
+                    window.addEventListener('deviceorientation', handleOrientation);
+                    resetButton.click(); // 許可が得られたらリセットを実行
+                } else {
+                    // 拒否された場合は表示したままにする
+                    alert('モーションセンサーへのアクセスが拒否されました。設定から許可してください。');
+                }
+            })
+            .catch(error => {
+                console.error('許可リクエスト中にエラーが発生しました。', error);
+                alert('モーションセンサーへのアクセス許可に失敗しました。');
+            });
+    } else {
+        alert('お使いのブラウザはモーションセンサーの許可をサポートしていません。');
+    }
 });
 
 // リセットボタンが押されたときの処理
@@ -45,14 +95,9 @@ resetButton.addEventListener('click', () => {
     initialGamma = currentGamma;
 });
 
-// ページロード後にリセット機能を実行
-window.addEventListener('load', () => {
-    resetButton.click();
-});
-
 // 記録開始ボタンが押されたときの処理
 startButton.addEventListener('click', () => {
-    if (!isRecording) {
+    if (hasPermission && !isRecording) {
         isRecording = true;
         recordedData.length = 0; // 既存のデータをクリア
         startButton.disabled = true;
@@ -65,6 +110,8 @@ startButton.addEventListener('click', () => {
                 gamma: currentGamma - initialGamma,
             });
         }, recordInterval);
+    } else if (!hasPermission) {
+        alert('モーションセンサーへのアクセスが許可されていません。');
     }
 });
 
@@ -83,7 +130,7 @@ stopButton.addEventListener('click', () => {
 // データの増減値を計算
 function calculateData(data) {
     const smoothedData = [];
-    
+
     let pdeltaBeta = 0;
     let pdeltaAlpha = 0;
     let pdeltaGamma = 0;
@@ -169,7 +216,7 @@ function downloadCSV(data) {
         let add_data = [i,0,30,0,10,0,item['beta'],item['alpha'],item['gamma'],20,20,107,107,20,20,107,107,20,20,107,107,20,20,107,107,20,20,107,107,20,20,107,107];
         csv_data.push(add_data);
     });
-    
+
     const csvString = csv_data.map(row => row.join(',')).join('\r\n');
 
     const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8;' });

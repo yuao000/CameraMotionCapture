@@ -25,6 +25,18 @@
             font-size: 1em;
             cursor: pointer;
         }
+        #permissionRequest {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #permissionButton {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -39,6 +51,11 @@
     <div>
         <button id="startButton">記録開始</button>
         <button id="stopButton" disabled>記録停止</button>
+    </div>
+
+    <div id="permissionRequest" class="hidden">
+        <p>モーションセンサーへのアクセスが許可されていません。</p>
+        <button id="permissionButton">許可を求める</button>
     </div>
 
     <script src="script.js"></script>
