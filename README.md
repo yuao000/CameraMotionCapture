@@ -21,7 +21,7 @@ https://yuao000.github.io/CameraMotionCapture/<br>
 
 ■PC側：<br>
 ①VMDエディタを起動（そぼろ様のVMD Editor（VMD←→CSV））<br>
-https://w.atwiki.jp/vpvpwiki/pages/218.html#id_e07bf223
+https://w.atwiki.jp/vpvpwiki/pages/218.html
 <br>
 
 ②ファイルタブのCSVインポートからCSVファイルを読み込み。<br>
