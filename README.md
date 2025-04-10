@@ -33,6 +33,9 @@ https://w.atwiki.jp/vpvpwiki/pages/218.html
 <br><br><br>
 【アップデート】<br>
 ・2025/04/10<br>
+iOSで正しく動作しない問題を解消しました。<br>
+改行コードを\r\nから\nに変更しました。<br><br>
 iOS 13以降で正しく動作しない問題を解消しました。<br>
 許可を求めるボタンを押下してモーションセンサーへのアクセスを許可してください。<br>
 ![image](https://github.com/user-attachments/assets/921c347b-22be-4889-ae13-325915c1630a)
+<br><br>
