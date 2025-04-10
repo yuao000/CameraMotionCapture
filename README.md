@@ -28,3 +28,10 @@ https://w.atwiki.jp/vpvpwiki/pages/218.html#id_e07bf223<br>
 ③何もイジらずに名前をつけて保存でvmd形式で保存する。<br>
 
 ④MMDで読み込めれば完了。<br>
+
+
+【アップデート】
+・2025/04/10
+iOS 13以降で正しく動作しない問題を解消しました。
+許可を求めるボタンを押下してモーションセンサーへのアクセスを許可してください。
+![image](https://github.com/user-attachments/assets/921c347b-22be-4889-ae13-325915c1630a)
